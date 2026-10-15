@@ -1,0 +1,26 @@
+{
+  "MAE":{
+    "Ridge (baseline)":36700.0,
+    "Random Forest":19689.0,
+    "Gradient Boosting":17028.0,
+    "Neural Net (PyTorch MLP)":12626.0
+  },
+  "RMSE":{
+    "Ridge (baseline)":66094.0,
+    "Random Forest":44612.0,
+    "Gradient Boosting":34802.0,
+    "Neural Net (PyTorch MLP)":25525.0
+  },
+  "MAPE_%":{
+    "Ridge (baseline)":57.23,
+    "Random Forest":15.45,
+    "Gradient Boosting":13.19,
+    "Neural Net (PyTorch MLP)":9.91
+  },
+  "R2":{
+    "Ridge (baseline)":0.7465,
+    "Random Forest":0.8845,
+    "Gradient Boosting":0.9297,
+    "Neural Net (PyTorch MLP)":0.9622
+  }
+}
