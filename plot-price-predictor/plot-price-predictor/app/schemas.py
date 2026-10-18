@@ -19,6 +19,7 @@ class PlotFeatures(BaseModel):
     frontage_m: float = Field(20.0, gt=0, le=500)
 
     model_config = {
+        "allow_inf_nan": False,
         "json_schema_extra": {
             "examples": [{
                 "acres": 2.5, "location": "Lakeview", "zoning": "residential",

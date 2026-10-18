@@ -46,3 +46,20 @@ def test_predict_all_models(client):
 def test_invalid_acres_rejected(client):
     bad = dict(PAYLOAD, acres=-1)
     assert client.post("/predict", json=bad).status_code == 422
+
+
+def test_saved_comparison_batch_and_session_isolation():
+    with TestClient(app) as a, TestClient(app) as b:
+        saved=a.post('/runs',json=PAYLOAD).json()
+        assert saved['kind']=='estimate'
+        assert b.get('/runs/'+saved['id']+'/report.csv').status_code==404
+        assert a.get('/runs/'+saved['id']+'/report.csv').status_code==200
+        compared=a.post('/compare',json={'baseline':PAYLOAD,'alternative':dict(PAYLOAD,acres=4)}).json()
+        assert len(compared['data']['records'])==2
+        assert compared['data']['difference']==pytest.approx(compared['data']['records'][1]['estimated_price']-compared['data']['records'][0]['estimated_price'])
+        sample=a.get('/sample.csv').content
+        batch=a.post('/runs/csv',files={'file':('sample.csv',sample,'text/csv')})
+        assert batch.status_code==200 and len(batch.json()['data']['records'])==3
+        assert len(a.get('/runs').json())==3
+        assert b.get('/runs').json()==[]
+        assert a.post('/runs/csv',files={'file':('bad.csv',b'acres,location\n1,Unknown','text/csv')}).status_code==422
