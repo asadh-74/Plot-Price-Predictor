@@ -6,6 +6,8 @@ Docs:         http://localhost:8000/docs
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.responses import FileResponse
+from pathlib import Path
 
 from app.model_loader import MAPE, ModelStore
 from app.schemas import ModelName, PlotFeatures, PredictionResponse
@@ -66,3 +68,8 @@ def predict(features: PlotFeatures):
             "high": round(best * (1 + mape), 0),
         },
     )
+
+
+@app.get("/", include_in_schema=False)
+def index():
+    return FileResponse(Path(__file__).parent / "static" / "index.html")
